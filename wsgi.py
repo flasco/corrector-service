@@ -10,9 +10,9 @@ import leancloud
 from app import app
 from cloud import engine
 
-APP_ID = 'bgGlT2qnbQncaTjrP0aHHqw3-MdYXbMMI' # os.environ['LEANCLOUD_APP_ID']  
-APP_KEY = 'XUMUU9uttEPVJL5JHLKFqC0q' # os.environ['LEANCLOUD_APP_KEY'] ||
-PORT = 3000 # int(os.environ['LEANCLOUD_APP_PORT'])
+APP_ID = os.environ.get('LEANCLOUD_APP_ID') or 'bgGlT2qnbQncaTjrP0aHHqw3-MdYXbMMI'
+APP_KEY = os.environ.get('LEANCLOUD_APP_KEY') or 'XUMUU9uttEPVJL5JHLKFqC0q'
+PORT = int(os.environ.get('LEANCLOUD_APP_PORT') or 3000)
 
 leancloud.init(APP_ID, app_key=APP_KEY)
 # Set this to be True if you need to access LeanCloud services with Master Key.
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     from gevent.pywsgi import WSGIServer
     from geventwebsocket.handler import WebSocketHandler
 
-    env = 'dev' # os.environ['LEANCLOUD_APP_ENV']
+    env = os.environ.get('LEANCLOUD_APP_ENV') or 'dev'
     if env == 'production':
         server = WSGIServer(('0.0.0.0', PORT), application, log=None, handler_class=WebSocketHandler)
         server.serve_forever()
