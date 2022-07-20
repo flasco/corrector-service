@@ -3,13 +3,17 @@ import torch
 import time
 from transformers import BertTokenizer, BertForMaskedLM
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = None
+tokenizer = None
 
-tokenizer = BertTokenizer.from_pretrained("shibing624/macbert4csc-base-chinese")
-model = BertForMaskedLM.from_pretrained("shibing624/macbert4csc-base-chinese")
-model.to(device)
+def init_model():
+    global model, tokenizer, device
+    tokenizer = BertTokenizer.from_pretrained("shibing624/macbert4csc-base-chinese")
+    model = BertForMaskedLM.from_pretrained("shibing624/macbert4csc-base-chinese")
+    model.to(device)
 
-with torch.no_grad():
-    print('model init succeed')
+    with torch.no_grad():
+        print('model init succeed')
 
 def get_errors(corrected_text, origin_text):
     sub_details = []
@@ -30,6 +34,9 @@ def get_errors(corrected_text, origin_text):
     return corrected_text, sub_details
 
 def check_corrector(cur_text):
+    if model == None or tokenizer == None:
+        return { "message": "please wait while initializing" }
+
     with torch.no_grad():
         stamp = time.time()
         outputs = model(**tokenizer([cur_text], padding=True, return_tensors='pt').to(device))

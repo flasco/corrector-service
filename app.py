@@ -1,26 +1,33 @@
 # coding: utf-8
+import os
 import sys
-from datetime import datetime
 import json
 import leancloud
 from flask import Flask, jsonify, request
 from flask import render_template
 from leancloud import LeanCloudError
+from urllib import request as urllib_request
+import threading
+import time
 
-from core.corrector import check_corrector
+from core.corrector import check_corrector, init_model
 
-app = Flask(__name__)
+def star_init():
+    time.sleep(5)
+    print('start init model')
+    init_model()
+
+class FlaskApp(Flask):
+    def __init__(self, *args, **kwargs):
+        super(FlaskApp, self).__init__(*args, **kwargs)
+        threading.Thread(target=star_init).start()
+
+app = FlaskApp(__name__)
 app.config['JSON_AS_ASCII'] = False
 
 @app.route('/')
 def index():
     return render_template('index.html')
-
-
-@app.route('/time')
-def time():
-    return str(datetime.now())
-
 
 @app.route('/version')
 def print_version():
