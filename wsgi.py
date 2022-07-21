@@ -6,13 +6,11 @@ monkey.patch_all()
 import os
 
 from app import app
-from cloud import engine
 
 PORT = int(os.environ.get('FLASK_APP_PORT') or 3000)
 
 # Uncomment the following line to redirect HTTP requests to HTTPS.
 # app = leancloud.HttpsRedirectMiddleware(app)
-app = engine.wrap(app)
 application = app
 
 if __name__ == '__main__':
