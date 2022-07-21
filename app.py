@@ -1,12 +1,7 @@
 # coding: utf-8
-import os
 import sys
 import json
-import leancloud
-from flask import Flask, jsonify, request
-from flask import render_template
-from leancloud import LeanCloudError
-from urllib import request as urllib_request
+from flask import Flask, jsonify, request, render_template
 import threading
 import time
 

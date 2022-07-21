@@ -5,11 +5,15 @@ from transformers import BertTokenizer, BertForMaskedLM
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = None
 tokenizer = None
+inited = False
 
 def init_model():
-    global model, tokenizer, device
-    tokenizer = BertTokenizer.from_pretrained("shibing624/macbert4csc-base-chinese")
-    model = BertForMaskedLM.from_pretrained("shibing624/macbert4csc-base-chinese")
+    global model, tokenizer, device, inited
+    if (inited):
+        return
+    inited = True
+    tokenizer = BertTokenizer.from_pretrained("./model")
+    model = BertForMaskedLM.from_pretrained("./model")
     model.to(device)
 
     with torch.no_grad():
