@@ -19,4 +19,8 @@ RUN git lfs install
 
 RUN git clone https://huggingface.co/shibing624/macbert4csc-base-chinese model
 
+# support chinese with utf-8
+RUN localedef -c -f UTF-8 -i zh_CN zh_CN.utf8
+ENV LC_ALL zh_CN.UTF-8
+
 CMD ["python", "wsgi.py"]

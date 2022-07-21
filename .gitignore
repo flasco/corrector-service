@@ -89,3 +89,5 @@ ENV/
 # LeanCloud settings
 .leancloud/
 .avoscloud/
+
+model
