@@ -86,8 +86,4 @@ ENV/
 # Rope project settings
 .ropeproject
 
-# LeanCloud settings
-.leancloud/
-.avoscloud/
-
 model

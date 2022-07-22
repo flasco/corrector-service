@@ -1,4 +1,4 @@
 POST http://localhost:3000/api/corrector
 content-type: application/json
 
-{"content":"天渐渐的冷了，回忆用上心头"}
+{"content":"回忆永上心头。"}

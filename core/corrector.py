@@ -1,4 +1,4 @@
-import operator
+import functools
 import torch
 import time
 from transformers import BertTokenizer, BertForMaskedLM
@@ -19,6 +19,9 @@ def init_model():
     with torch.no_grad():
         print('model init succeed')
 
+def cmp(a,b):
+    return a["start"] - b["start"];
+
 def get_errors(corrected_text, origin_text):
     sub_details = []
     for i, ori_char in enumerate(origin_text):
@@ -33,8 +36,13 @@ def get_errors(corrected_text, origin_text):
                 # pass english upper char
                 corrected_text = corrected_text[:i] + ori_char + corrected_text[i + 1:]
                 continue
-            sub_details.append((ori_char, corrected_text[i], i, i + 1))
-    sub_details = sorted(sub_details, key=operator.itemgetter(2))
+            sub_details.append({
+                "before": ori_char,
+                "after": corrected_text[i],
+                "start": i,
+                "end": i + 1
+            })
+    sub_details = sorted(sub_details, key=functools.cmp_to_key(cmp))
     return corrected_text, sub_details
 
 def check_corrector(cur_text):
@@ -52,5 +60,5 @@ def check_corrector(cur_text):
             corrected_text = _text[:len(text)]
             corrected_text, details = get_errors(corrected_text, text)
             print(text, ' => ', corrected_text, details)
-            result.append({ "corrected": corrected_text, "position": details})
+            result.append({ "corrected": corrected_text, "details": details})
         return { "result": result, "cost": '{:.2f}ms'.format(cost * 1000) }

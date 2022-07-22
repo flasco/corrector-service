@@ -1,6 +1,5 @@
 # coding: utf-8
 import sys
-import json
 from flask import Flask, jsonify, request, render_template
 import threading
 import time
@@ -82,7 +81,7 @@ def python_version():
 
 @app.route('/api/corrector', methods=['POST'])
 def check_correct():
-    data = json.loads(request.get_data(as_text=True))
+    data = request.get_json()
     print(data)
     content = data['content']
     if len(content) > 512:
