@@ -2,3 +2,10 @@ POST http://localhost:3000/api/corrector
 content-type: application/json
 
 {"content":"回忆永上心头。"}
+
+###
+
+POST http://localhost:3000/api/sensitive
+content-type: application/json
+
+{"content":"看我操作"}

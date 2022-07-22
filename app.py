@@ -5,6 +5,7 @@ import threading
 import time
 
 from core.corrector import check_corrector, init_model
+from core.sensitive import check_sensitive, init_sensitive
 
 def star_init():
     time.sleep(5)
@@ -14,6 +15,7 @@ def star_init():
 class FlaskApp(Flask):
     def __init__(self, *args, **kwargs):
         super(FlaskApp, self).__init__(*args, **kwargs)
+        init_sensitive()
         threading.Thread(target=star_init).start()
 
 app = FlaskApp(__name__)
@@ -80,11 +82,20 @@ def python_version():
     return jsonify({"python-version": sys.version})
 
 @app.route('/api/corrector', methods=['POST'])
-def check_correct():
+def corrector():
     data = request.get_json()
     print(data)
     content = data['content']
     if len(content) > 512:
         raise BadRequest('content length should less than 512')
     result = check_corrector(content)
+    return jsonify({ "data": result })
+
+@app.route('/api/sensitive', methods=['POST'])
+def sensitive():
+    data = request.get_json()
+    print(data)
+    content = data['content']
+
+    result = check_sensitive(content)
     return jsonify({ "data": result })

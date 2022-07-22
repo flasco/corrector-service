@@ -87,3 +87,4 @@ ENV/
 .ropeproject
 
 model
+sensitive-repo
