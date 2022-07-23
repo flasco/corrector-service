@@ -1,4 +1,4 @@
-FROM python:3.7 AS downloader
+FROM python:3.10.4 AS downloader
 WORKDIR /usr/local
 
 RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list &&  \
@@ -9,7 +9,7 @@ RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list &&  \
     git clone --depth=1 https://huggingface.co/shibing624/macbert4csc-base-chinese model && \
     cd model && rm -rf .git
 
-FROM bitnami/pytorch:1.12.0
+FROM python:3.10.4
 
 COPY ./ /usr/local/flask_app/
 
@@ -17,7 +17,7 @@ WORKDIR /usr/local/flask_app/
 
 COPY --from=downloader /usr/local/model ./model
 
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 ENV FLASK_APP_ENV='production'
 
